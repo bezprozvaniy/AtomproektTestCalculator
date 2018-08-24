@@ -1,0 +1,73 @@
+﻿@using Calculation.Models;
+@model CalculatorModel
+
+@{
+    ViewBag.Title = "Калькулятор";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Калькулятор</h2>
+
+@using (Html.BeginForm("Calculate", "Calculator", new { }, FormMethod.Post))
+{
+    <h3> Настройки калькуляции:</h3>
+    <table>
+        <tr>
+            <td>@Html.LabelFor(_ => _.CalculatorSettings.InputString)</td>
+            <td>
+                @Html.TextBoxFor(_ => _.CalculatorSettings.InputString)
+                @Html.ValidationMessageFor(_ => _.CalculatorSettings.InputString)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(_ => _.CalculatorSettings.ExpectedResult)</td>
+            <td>
+                @Html.TextBoxFor(_ => _.CalculatorSettings.ExpectedResult)
+                @Html.ValidationMessageFor(_ => _.CalculatorSettings.ExpectedResult)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(_ => _.CalculatorSettings.UseMultiply)</td>
+            <td>@Html.CheckBoxFor(_ => _.CalculatorSettings.UseMultiply)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(_ => _.CalculatorSettings.UseAdd)</td>
+            <td>@Html.CheckBoxFor(_ => _.CalculatorSettings.UseAdd)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(_ => _.CalculatorSettings.UseMinus)</td>
+            <td>@Html.CheckBoxFor(_ => _.CalculatorSettings.UseMinus)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(_ => _.CalculatorSettings.MaximumTryCount)</td>
+            <td>
+                @Html.TextBoxFor(_ => _.CalculatorSettings.MaximumTryCount)
+                @Html.ValidationMessageFor(_ => _.CalculatorSettings.MaximumTryCount)
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Посчитать" />
+}
+
+@{
+    if (!string.IsNullOrWhiteSpace(Model.ModelException))
+    {
+        <hr />
+        <div>Ошибка при расчете:</div>
+        <div class="fatal">
+            @Model.ModelException
+        </div>
+    }
+}
+
+@{
+    if (Model.CalculationResult != null)
+    {
+        <hr />
+        <div>
+            <div>Решение:</div>
+            <div>Попыток подбора: @Model.CalculationResult.TryCount</div>
+            <div>Формула: @Model.CalculationResult.CalculationResult</div>
+        </div>
+    }
+}
